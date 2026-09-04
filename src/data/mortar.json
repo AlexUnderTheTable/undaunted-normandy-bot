@@ -1,0 +1,16 @@
+{
+  "id": "mortar",
+  "name": "Миномёт",
+  "tree": {
+    "type": "question",
+    "text": "Есть квадрат с 2 или более врагами?",
+    "memo": "mortarSquareSelection",
+    "yes": { "type": "action", "text": "Обстрелять этот квадрат", "memo": "mortarSquareSelection" },
+    "no": {
+      "type": "question",
+      "text": "Есть квадрат хотя бы с одним врагом?",
+      "yes": { "type": "action", "text": "Обстрелять этот квадрат", "memo": "mortarSquareSelection" },
+      "no": { "type": "action", "text": "Переместиться / подготовить позицию" }
+    }
+  }
+}

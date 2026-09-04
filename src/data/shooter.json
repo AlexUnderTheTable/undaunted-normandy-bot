@@ -1,0 +1,46 @@
+{
+  "id": "shooter",
+  "name": "Стрелок",
+  "trees": {
+    "keyPoints": {
+      "type": "question",
+      "text": "Может ли стрелок захватить ключевую точку?",
+      "yes": { "type": "action", "text": "Захватить ключевую точку" },
+      "no": {
+        "type": "question",
+        "text": "Может ли стрелок приблизиться к приоритетной ключевой точке?",
+        "memo": "keyPointValue",
+        "yes": { "type": "action", "text": "Двигаться к приоритетной ключевой точке", "memo": "keyPointValue" },
+        "no": { "type": "action", "text": "Атаковать", "memo": "targetSelection" }
+      }
+    },
+    "suppression": {
+      "type": "question",
+      "text": "Может ли стрелок захватить ключевую точку?",
+      "yes": { "type": "action", "text": "Захватить ключевую точку" },
+      "no": {
+        "type": "question",
+        "text": "Есть ли ключевая точка, рядом с которой (в пределах 2 клеток) находится враг?",
+        "yes": { "type": "action", "text": "Двигаться к этой ключевой точке" },
+        "no": {
+          "type": "question",
+          "text": "Есть доступная цель с защитой ≤8?",
+          "memo": "targetSelection",
+          "yes": { "type": "action", "text": "Атаковать", "memo": "targetSelection" },
+          "no": {
+            "type": "question",
+            "text": "Лучшая доступная цель имеет защиту 9+, но к ней можно приблизиться?",
+            "yes": { "type": "action", "text": "Переместиться к этой цели" },
+            "no": {
+              "type": "question",
+              "text": "Можно переместиться к предпочтительной цели атаки?",
+              "memo": "targetSelection",
+              "yes": { "type": "action", "text": "Переместиться к предпочтительной цели атаки", "memo": "targetSelection" },
+              "no": { "type": "action", "text": "Затаиться" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

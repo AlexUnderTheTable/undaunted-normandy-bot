@@ -1,0 +1,21 @@
+{
+  "id": "sniper",
+  "name": "Снайпер",
+  "tree": {
+    "type": "question",
+    "text": "Может ли снайпер атаковать?",
+    "memo": "targetSelection_sniper",
+    "yes": { "type": "action", "text": "Атаковать", "memo": "targetSelection_sniper" },
+    "no": {
+      "type": "question",
+      "text": "Может ли снайпер приблизиться к цели?",
+      "yes": { "type": "action", "text": "Приблизиться к цели" },
+      "no": {
+        "type": "question",
+        "text": "Может ли снайпер занять лучшее укрытие?",
+        "yes": { "type": "action", "text": "Занять лучшее укрытие" },
+        "no": { "type": "action", "text": "Замаскироваться" }
+      }
+    }
+  }
+}

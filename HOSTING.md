@@ -22,7 +22,29 @@ git push -u origin main
 
 Проект статический (Vite), бэкенда нет — GitHub Pages отлично подходит.
 
+### Вариант Б (используем сейчас): вручную, через ветку gh-pages
+
+```bash
+npm run build
+npx gh-pages -d dist
+```
+
+(`gh-pages` — npm-пакет, поставится через `npx` при первом запуске,
+публикует `dist/` в ветку `gh-pages`). В Settings → Pages → Source
+выбрать **"Deploy from a branch"** → ветка `gh-pages` / `(root)`.
+
+Обновление сайта после правок кода — повторить обе команды заново
+(`npm run build` + `npx gh-pages -d dist`).
+
 ### Вариант А: через GitHub Actions (автодеплой при каждом пуше)
+
+Есть в репозитории (`.github/workflows/deploy.yml`), но не используется
+сейчас — при первом прогоне упал с `404 Not Found` от `deploy-pages@v4`,
+потому что в Settings → Pages не был явно включён источник
+"GitHub Actions" (само наличие workflow-файла это не делает — нужно
+явно выбрать в настройках). Если захотите вернуться к автодеплою при
+каждом пуше вместо ручного `gh-pages`, переключите Source обратно на
+"GitHub Actions" в Settings → Pages.
 
 Создать `.github/workflows/deploy.yml`:
 

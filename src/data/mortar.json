@@ -3,14 +3,35 @@
   "name": "Миномёт",
   "tree": {
     "type": "question",
-    "text": "Есть квадрат с 2 или более врагами?",
-    "memo": "mortarSquareSelection",
-    "yes": { "type": "action", "text": "Обстрелять этот квадрат", "memo": "mortarSquareSelection" },
-    "no": {
+    "text": "Жетон миномёта есть на поле?",
+    "yes": {
       "type": "question",
-      "text": "Есть квадрат хотя бы с одним врагом?",
-      "yes": { "type": "action", "text": "Обстрелять этот квадрат", "memo": "mortarSquareSelection" },
-      "no": { "type": "action", "text": "Переместиться / подготовить позицию" }
+      "text": "Есть квадрат с 2 или более врагами?",
+      "memo": "mortarSquareSelection",
+      "yes": {
+        "type": "action",
+        "text": "Обстрелять этот квадрат",
+        "memo": "mortarSquareSelection"
+      },
+      "no": {
+        "type": "question",
+        "text": "Есть квадрат хотя бы с одним врагом?",
+        "yes": {
+          "type": "action",
+          "text": "Обстрелять этот квадрат",
+          "memo": "mortarSquareSelection"
+        },
+        "no": {
+          "type": "action",
+          "text": "Переместиться / подготовить позицию",
+          "memo": "pathSelectionRule"
+        }
+      }
+    },
+    "no": {
+      "type": "action",
+      "text": "Жетона миномёта нет на поле — действия с жетоном недоступны",
+      "note": "По правилу §13 карта не пропускается: разыграйте то действие карты, которое не требует жетона на поле. Если такого действия нет — карта уходит в сброс без эффекта."
     }
   }
 }

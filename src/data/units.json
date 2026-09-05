@@ -4,7 +4,7 @@
   { "id": "machinegunner", "name": "Пулемётчик", "file": "machinegunner.json" },
   { "id": "sniper", "name": "Снайпер", "file": "sniper.json" },
   { "id": "mortar", "name": "Миномёт", "file": "mortar.json" },
-  { "id": "sergeant", "name": "Сержант", "file": "sergeant.json" },
+  { "id": "sergeant", "name": "Командир взвода", "file": "sergeant.json" },
   { "id": "lieutenant", "name": "Заместитель командира", "file": "lieutenant.json" },
-  { "id": "commander", "name": "Командир", "file": "commander.json" }
+  { "id": "commander", "name": "Командир отделения", "file": "commander.json" }
 ]

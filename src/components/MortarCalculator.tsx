@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { chooseMortarSquare } from "../logic/mortar";
 
 interface Row {
   id: number;
@@ -39,46 +40,9 @@ export default function MortarCalculator({ priorityList }: Props) {
     setRows((rs) => (rs.length > 1 ? rs.filter((r) => r.id !== id) : rs));
   }
 
-  const rank = (type: string) => {
-    const i = priorityList.indexOf(type);
-    return i === -1 ? priorityList.length : i;
-  };
-
-  const usable = rows
-    .map((r) => ({
-      row: r,
-      enemyCount: parseFloat(r.enemyCount),
-      ownCount: parseFloat(r.ownCount || "0"),
-      rank: rank(r.bestEnemyType),
-    }))
-    .filter((r) => !Number.isNaN(r.enemyCount) && r.enemyCount > 0);
-
-  let bestId: number | null = null;
-  let reason = "";
-
-  if (usable.length > 0) {
-    const maxEnemies = Math.max(...usable.map((r) => r.enemyCount));
-    let group = usable.filter((r) => r.enemyCount === maxEnemies);
-    reason = "больше врагов в квадрате";
-
-    if (group.length > 1) {
-      const minRank = Math.min(...group.map((r) => r.rank));
-      const byRank = group.filter((r) => r.rank === minRank);
-      if (byRank.length < group.length) reason += ", приоритетнее цель";
-      group = byRank;
-    }
-
-    if (group.length > 1) {
-      const minOwn = Math.min(...group.map((r) => r.ownCount));
-      const byOwn = group.filter((r) => r.ownCount === minOwn);
-      if (byOwn.length < group.length) reason += ", меньше своих в квадрате";
-      group = byOwn;
-    }
-
-    if (group.length > 1) reason += " — при ничьей выбирайте случайно";
-
-    bestId = group[0].row.id;
-  }
+  const choice = chooseMortarSquare(rows, priorityList);
+  const bestId = choice === null ? null : rows[choice.index].id;
+  const reason = choice?.reason ?? "";
 
   return (
     <div className="calc">

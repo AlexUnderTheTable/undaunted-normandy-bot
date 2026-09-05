@@ -8,7 +8,7 @@ import mortar from "./mortar.json";
 import sergeant from "./sergeant.json";
 import lieutenant from "./lieutenant.json";
 import commander from "./commander.json";
-import type { AiGoal, CommonData, UnitDef, UnitListEntry } from "./types";
+import type { AiGoal, CommonData, TreeNode, UnitDef, UnitListEntry } from "./types";
 
 export const common = commonData as CommonData;
 export const unitsList = unitsListData as UnitListEntry[];
@@ -30,11 +30,36 @@ export function getUnit(id: string): UnitDef {
   return unit;
 }
 
-export function getUnitTree(id: string, aiGoal: AiGoal) {
+// Боевые юниты, для которых действует правило эндшпиля (см. OPEN_QUESTIONS.md п. 12).
+// Командиры (sergeant/lieutenant/commander) намеренно не входят — правило про
+// личный бой юнита на поле, координацию оно не трогает.
+const AGGRESSION_UNITS = new Set(["shooter", "scout", "machinegunner", "sniper", "mortar"]);
+
+/**
+ * Вставляет вопрос про эндшпиль сразу после гейта «жетон на поле» (п. 8).
+ * Обе ветки — «да» и «впереди бот/ровно» — ведут в один и тот же исходный
+ * скрипт юнита (одна и та же ссылка на объект, без дублирования в JSON):
+ * это не меняет сам скрипт, а даёт игроку разовую подсказку-памятку.
+ */
+function withEndgameGate(tree: TreeNode): TreeNode {
+  if (tree.type !== "question") return tree;
+  return {
+    ...tree,
+    yes: {
+      type: "question",
+      text: "Игрок сейчас впереди по очкам сценария?",
+      memo: "endgameAggression",
+      yes: tree.yes,
+      no: tree.yes,
+    },
+  };
+}
+
+export function getUnitTree(id: string, aiGoal: AiGoal): TreeNode {
   const unit = getUnit(id);
-  if (unit.trees) return unit.trees[aiGoal];
-  if (unit.tree) return unit.tree;
-  throw new Error(`Unit ${id} has no tree defined`);
+  const tree = unit.trees ? unit.trees[aiGoal] : unit.tree;
+  if (!tree) throw new Error(`Unit ${id} has no tree defined`);
+  return AGGRESSION_UNITS.has(id) ? withEndgameGate(tree) : tree;
 }
 
 export function resolveMemo(memoKey: string, aiGoal: AiGoal): string {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { chooseTarget } from "../logic/targetSelection";
 
 interface Row {
   id: number;
@@ -32,59 +33,9 @@ export default function TargetCalculator({ priorityList }: Props) {
     setRows((rs) => (rs.length > 1 ? rs.filter((r) => r.id !== id) : rs));
   }
 
-  const rank = (unitType: string) => {
-    const i = priorityList.indexOf(unitType);
-    return i === -1 ? priorityList.length : i;
-  };
-
-  const usable = rows
-    .map((r) => ({
-      row: r,
-      defense: parseFloat(r.defense),
-      distance: parseFloat(r.distance),
-      rank: rank(r.unitType),
-    }))
-    .filter((r) => !Number.isNaN(r.defense));
-
-  let bestId: number | null = null;
-  let reason = "";
-
-  if (usable.length > 0) {
-    const minRank = Math.min(...usable.map((r) => r.rank));
-    const topGroup = usable.filter((r) => r.rank === minRank);
-
-    function pickBest(group: typeof usable) {
-      const minDefense = Math.min(...group.map((r) => r.defense));
-      const byDefense = group.filter((r) => r.defense === minDefense);
-      if (byDefense.length === 1) return byDefense[0];
-      const withDistance = byDefense.filter((r) => !Number.isNaN(r.distance));
-      if (withDistance.length > 0) {
-        const minDist = Math.min(...withDistance.map((r) => r.distance));
-        const byDist = withDistance.filter((r) => r.distance === minDist);
-        return byDist[0];
-      }
-      return byDefense[0];
-    }
-
-    const normalBest = pickBest(topGroup);
-
-    const exceptionCandidates = usable.filter((r) => {
-      if (r.rank <= minRank) return false;
-      const higher = usable.filter((h) => h.rank < r.rank);
-      if (higher.length === 0) return false;
-      const minHigherDefense = Math.min(...higher.map((h) => h.defense));
-      return r.defense <= minHigherDefense - 2;
-    });
-
-    if (exceptionCandidates.length > 0) {
-      const best = pickBest(exceptionCandidates);
-      bestId = best.row.id;
-      reason = "исключение: защита ≥2 ниже всех целей более высокого приоритета";
-    } else {
-      bestId = normalBest.row.id;
-      reason = topGroup.length > 1 ? "по приоритету, тай-брейк по защите/расстоянию" : "по приоритету";
-    }
-  }
+  const choice = chooseTarget(rows, priorityList);
+  const bestId = choice === null ? null : rows[choice.index].id;
+  const reason = choice?.reason ?? "";
 
   return (
     <div className="calc">
@@ -112,7 +63,7 @@ export default function TargetCalculator({ priorityList }: Props) {
             </div>
             <div className="calc-fields">
               <label>
-                Защита
+                Итоговая защита
                 <input
                   type="number"
                   inputMode="decimal"

@@ -3,7 +3,7 @@ export type AiGoal = "keyPoints" | "suppression";
 export interface QuestionNode {
   type: "question";
   text: string;
-  memo?: string;
+  memo?: string | string[];
   note?: string;
   yes: TreeNode;
   no: TreeNode;
@@ -17,7 +17,7 @@ export interface ChoiceOption {
 export interface ChoiceNode {
   type: "choice";
   text: string;
-  memo?: string;
+  memo?: string | string[];
   note?: string;
   options: ChoiceOption[];
 }
@@ -25,7 +25,7 @@ export interface ChoiceNode {
 export interface ActionNode {
   type: "action";
   text: string;
-  memo?: string;
+  memo?: string | string[];
   note?: string;
 }
 

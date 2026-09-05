@@ -102,6 +102,12 @@ function MemoBox({ memoKey, aiGoal }: { memoKey: string; aiGoal: AiGoal }) {
   );
 }
 
+/** Узел дерева может нести несколько памяток разом (например, формулу точки и правило маршрута). */
+function memoKeys(node: TreeNode): string[] {
+  if (!node.memo) return [];
+  return Array.isArray(node.memo) ? node.memo : [node.memo];
+}
+
 function TreeWalker({
   unitId,
   unitName,
@@ -116,6 +122,7 @@ function TreeWalker({
   const root = getUnitTree(unitId, aiGoal);
   const [stack, setStack] = useState<TreeNode[]>([root]);
   const current = stack[stack.length - 1];
+  const memos = memoKeys(current);
 
   function goTo(next: TreeNode) {
     setStack((s) => [...s, next]);
@@ -137,13 +144,20 @@ function TreeWalker({
         <p className="question">{current.text}</p>
       )}
       {current.note && <p className="note">{current.note}</p>}
-      {current.memo && <MemoBox memoKey={current.memo} aiGoal={aiGoal} />}
-      {current.memo === "keyPointValue" && <KeyPointCalculator />}
-      {(current.memo === "targetSelection" || current.memo === "targetSelection_sniper") && (
-        <TargetCalculator priorityList={resolvePriorityList(current.memo, aiGoal)} />
+      {memos.map((key) => (
+        <MemoBox key={key} memoKey={key} aiGoal={aiGoal} />
+      ))}
+      {memos.includes("keyPointValue") && <KeyPointCalculator />}
+      {(memos.includes("targetSelection") || memos.includes("targetSelection_sniper")) && (
+        <TargetCalculator
+          priorityList={resolvePriorityList(
+            memos.includes("targetSelection_sniper") ? "targetSelection_sniper" : "targetSelection",
+            aiGoal,
+          )}
+        />
       )}
-      {current.memo === "mortarSquareSelection" && (
-        <MortarCalculator priorityList={resolvePriorityList(current.memo, aiGoal)} />
+      {memos.includes("mortarSquareSelection") && (
+        <MortarCalculator priorityList={resolvePriorityList("mortarSquareSelection", aiGoal)} />
       )}
 
       {current.type === "question" && (

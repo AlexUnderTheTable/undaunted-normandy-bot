@@ -4,7 +4,7 @@
   "tree": {
     "type": "question",
     "text": "Можно пополнить (есть смысл/возможность)?",
-    "yes": { "type": "action", "text": "Пополнить" },
+    "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
     "no": {
       "type": "question",
       "text": "Есть юнит, который прямо сейчас может атаковать или захватить ключевую точку?",

@@ -9,13 +9,17 @@
     "no": {
       "type": "question",
       "text": "Можно пополнить?",
-      "yes": { "type": "action", "text": "Пополнить" },
+      "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
       "no": {
         "type": "question",
         "text": "В зоне розыгрыша есть уже сыгранная карта пулемётчика его отделения?",
         "memo": "inspireRule",
         "yes": { "type": "action", "text": "Воодушевить пулемётчика", "memo": "inspireRule" },
-        "no": { "type": "action", "text": "Пополнить (если возможно) / нет доступного действия" }
+        "no": {
+          "type": "action",
+          "text": "Пополнить (если возможно) / нет доступного действия",
+          "memo": ["reinforceRule", "reinforceUnitChoice"]
+        }
       }
     }
   }

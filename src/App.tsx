@@ -76,6 +76,7 @@ function UnitPicker({
   return (
     <div className="screen">
       <h1>Какая карта выпала?</h1>
+      <MemoBox memoKey="generalRule" aiGoal={aiGoal} />
       <div className="options">
         {unitsList.map((u) => (
           <button key={u.id} onClick={() => onSelect(u.id)}>

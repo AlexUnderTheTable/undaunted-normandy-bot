@@ -45,8 +45,6 @@ export interface UnitListEntry {
 }
 
 export interface CommonData {
-  generalRule: string;
-  reinforceRule: string;
   priorityLists: Record<string, string[]>;
   memos: Record<string, string>;
 }

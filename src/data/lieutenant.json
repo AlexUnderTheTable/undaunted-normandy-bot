@@ -8,7 +8,7 @@
     "no": {
       "type": "question",
       "text": "Можно пополнить?",
-      "yes": { "type": "action", "text": "Пополнить" },
+      "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
       "no": {
         "type": "question",
         "text": "Можно направить боевой юнит к ближайшему врагу?",

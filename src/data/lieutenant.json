@@ -1,19 +1,205 @@
 {
   "id": "lieutenant",
   "name": "Заместитель командира",
-  "tree": {
-    "type": "question",
-    "text": "Можно направить стрелка к ключевой точке?",
-    "yes": { "type": "action", "text": "Направить стрелка к ключевой точке" },
-    "no": {
+  "trees": {
+    "keyPoints": {
       "type": "question",
-      "text": "Можно пополнить?",
-      "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
+      "text": "Можно направить стрелка к ключевой точке?",
+      "yes": {
+        "type": "action",
+        "text": "Направить стрелка к ключевой точке"
+      },
       "no": {
         "type": "question",
-        "text": "Можно направить боевой юнит к ближайшему врагу?",
-        "yes": { "type": "action", "text": "Направить боевой юнит к ближайшему врагу" },
-        "no": { "type": "action", "text": "Нет доступного действия" }
+        "text": "В вашем личном резерве ещё остались карты стрелка?",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ],
+        "yes": {
+          "type": "action",
+          "text": "Пополнить: карта стрелка",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ]
+        },
+        "no": {
+          "type": "question",
+          "text": "В вашем личном резерве ещё остались карты разведчика?",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ],
+          "yes": {
+            "type": "action",
+            "text": "Пополнить: карта разведчика",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ]
+          },
+          "no": {
+            "type": "question",
+            "text": "В вашем личном резерве ещё остались карты снайпера?",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ],
+            "yes": {
+              "type": "action",
+              "text": "Пополнить: карта снайпера",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ]
+            },
+            "no": {
+              "type": "question",
+              "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ],
+              "yes": {
+                "type": "action",
+                "text": "Пополнить: карта пулемётчика",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ]
+              },
+              "no": {
+                "type": "question",
+                "text": "В вашем личном резерве ещё остались карты миномёта?",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ],
+                "yes": {
+                  "type": "action",
+                  "text": "Пополнить: карта миномёта",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ]
+                },
+                "no": {
+                  "type": "question",
+                  "text": "Можно направить боевой юнит к ближайшему врагу?",
+                  "yes": {
+                    "type": "action",
+                    "text": "Направить боевой юнит к ближайшему врагу"
+                  },
+                  "no": {
+                    "type": "action",
+                    "text": "Нет доступного действия"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "suppression": {
+      "type": "question",
+      "text": "Можно направить стрелка к ключевой точке?",
+      "yes": {
+        "type": "action",
+        "text": "Направить стрелка к ключевой точке"
+      },
+      "no": {
+        "type": "question",
+        "text": "В вашем личном резерве ещё остались карты снайпера?",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ],
+        "yes": {
+          "type": "action",
+          "text": "Пополнить: карта снайпера",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ]
+        },
+        "no": {
+          "type": "question",
+          "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ],
+          "yes": {
+            "type": "action",
+            "text": "Пополнить: карта пулемётчика",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ]
+          },
+          "no": {
+            "type": "question",
+            "text": "В вашем личном резерве ещё остались карты миномёта?",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ],
+            "yes": {
+              "type": "action",
+              "text": "Пополнить: карта миномёта",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ]
+            },
+            "no": {
+              "type": "question",
+              "text": "В вашем личном резерве ещё остались карты стрелка?",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ],
+              "yes": {
+                "type": "action",
+                "text": "Пополнить: карта стрелка",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ]
+              },
+              "no": {
+                "type": "question",
+                "text": "В вашем личном резерве ещё остались карты разведчика?",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ],
+                "yes": {
+                  "type": "action",
+                  "text": "Пополнить: карта разведчика",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ]
+                },
+                "no": {
+                  "type": "question",
+                  "text": "Можно направить боевой юнит к ближайшему врагу?",
+                  "yes": {
+                    "type": "action",
+                    "text": "Направить боевой юнит к ближайшему врагу"
+                  },
+                  "no": {
+                    "type": "action",
+                    "text": "Нет доступного действия"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

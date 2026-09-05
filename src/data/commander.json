@@ -1,24 +1,272 @@
 {
   "id": "commander",
   "name": "Командир отделения",
-  "tree": {
-    "type": "question",
-    "text": "В зоне розыгрыша есть уже сыгранная карта стрелка его отделения, и этот стрелок может продвинуться к ключевой точке?",
-    "memo": "inspireRule",
-    "yes": { "type": "action", "text": "Воодушевить стрелка", "memo": "inspireRule" },
-    "no": {
+  "trees": {
+    "keyPoints": {
       "type": "question",
-      "text": "Можно пополнить?",
-      "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
+      "text": "В зоне розыгрыша есть уже сыгранная карта стрелка его отделения, и этот стрелок может продвинуться к ключевой точке?",
+      "memo": "inspireRule",
+      "yes": {
+        "type": "action",
+        "text": "Воодушевить стрелка",
+        "memo": "inspireRule"
+      },
+      "no": {
+        "type": "question",
+        "text": "В зоне розыгрыша есть уже сыгранная карта разведчика его отделения?",
+        "memo": "inspireRule",
+        "yes": {
+          "type": "action",
+          "text": "Воодушевить разведчика",
+          "memo": "inspireRule"
+        },
+        "no": {
+          "type": "question",
+          "text": "В зоне розыгрыша есть уже сыгранная карта снайпера его отделения?",
+          "memo": "inspireRule",
+          "yes": {
+            "type": "action",
+            "text": "Воодушевить снайпера",
+            "memo": "inspireRule"
+          },
+          "no": {
+            "type": "question",
+            "text": "В зоне розыгрыша есть уже сыгранная карта пулемётчика его отделения?",
+            "memo": "inspireRule",
+            "yes": {
+              "type": "action",
+              "text": "Воодушевить пулемётчика",
+              "memo": "inspireRule"
+            },
+            "no": {
+              "type": "question",
+              "text": "В зоне розыгрыша есть уже сыгранная карта миномёта его отделения?",
+              "memo": "inspireRule",
+              "yes": {
+                "type": "action",
+                "text": "Воодушевить миномёта",
+                "memo": "inspireRule"
+              },
+              "no": {
+                "type": "question",
+                "text": "В вашем личном резерве ещё остались карты стрелка?",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ],
+                "yes": {
+                  "type": "action",
+                  "text": "Пополнить: карта стрелка",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ]
+                },
+                "no": {
+                  "type": "question",
+                  "text": "В вашем личном резерве ещё остались карты разведчика?",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ],
+                  "yes": {
+                    "type": "action",
+                    "text": "Пополнить: карта разведчика",
+                    "memo": [
+                      "reinforceRule",
+                      "reinforceUnitChoice"
+                    ]
+                  },
+                  "no": {
+                    "type": "question",
+                    "text": "В вашем личном резерве ещё остались карты снайпера?",
+                    "memo": [
+                      "reinforceRule",
+                      "reinforceUnitChoice"
+                    ],
+                    "yes": {
+                      "type": "action",
+                      "text": "Пополнить: карта снайпера",
+                      "memo": [
+                        "reinforceRule",
+                        "reinforceUnitChoice"
+                      ]
+                    },
+                    "no": {
+                      "type": "question",
+                      "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+                      "memo": [
+                        "reinforceRule",
+                        "reinforceUnitChoice"
+                      ],
+                      "yes": {
+                        "type": "action",
+                        "text": "Пополнить: карта пулемётчика",
+                        "memo": [
+                          "reinforceRule",
+                          "reinforceUnitChoice"
+                        ]
+                      },
+                      "no": {
+                        "type": "question",
+                        "text": "В вашем личном резерве ещё остались карты миномёта?",
+                        "memo": [
+                          "reinforceRule",
+                          "reinforceUnitChoice"
+                        ],
+                        "yes": {
+                          "type": "action",
+                          "text": "Пополнить: карта миномёта",
+                          "memo": [
+                            "reinforceRule",
+                            "reinforceUnitChoice"
+                          ]
+                        },
+                        "no": {
+                          "type": "action",
+                          "text": "Нет доступного действия"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "suppression": {
+      "type": "question",
+      "text": "В зоне розыгрыша есть уже сыгранная карта снайпера его отделения?",
+      "memo": "inspireRule",
+      "yes": {
+        "type": "action",
+        "text": "Воодушевить снайпера",
+        "memo": "inspireRule"
+      },
       "no": {
         "type": "question",
         "text": "В зоне розыгрыша есть уже сыгранная карта пулемётчика его отделения?",
         "memo": "inspireRule",
-        "yes": { "type": "action", "text": "Воодушевить пулемётчика", "memo": "inspireRule" },
-        "no": {
+        "yes": {
           "type": "action",
-          "text": "Пополнить (если возможно) / нет доступного действия",
-          "memo": ["reinforceRule", "reinforceUnitChoice"]
+          "text": "Воодушевить пулемётчика",
+          "memo": "inspireRule"
+        },
+        "no": {
+          "type": "question",
+          "text": "В зоне розыгрыша есть уже сыгранная карта миномёта его отделения?",
+          "memo": "inspireRule",
+          "yes": {
+            "type": "action",
+            "text": "Воодушевить миномёта",
+            "memo": "inspireRule"
+          },
+          "no": {
+            "type": "question",
+            "text": "В зоне розыгрыша есть уже сыгранная карта стрелка его отделения, и этот стрелок может продвинуться к ключевой точке?",
+            "memo": "inspireRule",
+            "yes": {
+              "type": "action",
+              "text": "Воодушевить стрелка",
+              "memo": "inspireRule"
+            },
+            "no": {
+              "type": "question",
+              "text": "В зоне розыгрыша есть уже сыгранная карта разведчика его отделения?",
+              "memo": "inspireRule",
+              "yes": {
+                "type": "action",
+                "text": "Воодушевить разведчика",
+                "memo": "inspireRule"
+              },
+              "no": {
+                "type": "question",
+                "text": "В вашем личном резерве ещё остались карты снайпера?",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ],
+                "yes": {
+                  "type": "action",
+                  "text": "Пополнить: карта снайпера",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ]
+                },
+                "no": {
+                  "type": "question",
+                  "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+                  "memo": [
+                    "reinforceRule",
+                    "reinforceUnitChoice"
+                  ],
+                  "yes": {
+                    "type": "action",
+                    "text": "Пополнить: карта пулемётчика",
+                    "memo": [
+                      "reinforceRule",
+                      "reinforceUnitChoice"
+                    ]
+                  },
+                  "no": {
+                    "type": "question",
+                    "text": "В вашем личном резерве ещё остались карты миномёта?",
+                    "memo": [
+                      "reinforceRule",
+                      "reinforceUnitChoice"
+                    ],
+                    "yes": {
+                      "type": "action",
+                      "text": "Пополнить: карта миномёта",
+                      "memo": [
+                        "reinforceRule",
+                        "reinforceUnitChoice"
+                      ]
+                    },
+                    "no": {
+                      "type": "question",
+                      "text": "В вашем личном резерве ещё остались карты стрелка?",
+                      "memo": [
+                        "reinforceRule",
+                        "reinforceUnitChoice"
+                      ],
+                      "yes": {
+                        "type": "action",
+                        "text": "Пополнить: карта стрелка",
+                        "memo": [
+                          "reinforceRule",
+                          "reinforceUnitChoice"
+                        ]
+                      },
+                      "no": {
+                        "type": "question",
+                        "text": "В вашем личном резерве ещё остались карты разведчика?",
+                        "memo": [
+                          "reinforceRule",
+                          "reinforceUnitChoice"
+                        ],
+                        "yes": {
+                          "type": "action",
+                          "text": "Пополнить: карта разведчика",
+                          "memo": [
+                            "reinforceRule",
+                            "reinforceUnitChoice"
+                          ]
+                        },
+                        "no": {
+                          "type": "action",
+                          "text": "Нет доступного действия"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

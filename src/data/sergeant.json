@@ -1,16 +1,192 @@
 {
   "id": "sergeant",
   "name": "Командир взвода",
-  "tree": {
-    "type": "question",
-    "text": "Можно пополнить (есть смысл/возможность)?",
-    "yes": { "type": "action", "text": "Пополнить", "memo": ["reinforceRule", "reinforceUnitChoice"] },
-    "no": {
+  "trees": {
+    "keyPoints": {
       "type": "question",
-      "text": "Есть юнит, который прямо сейчас может атаковать или захватить ключевую точку?",
-      "note": "Приказ отдаётся ближайшему такому юниту; если подходит несколько — тому, у кого выше приоритет атаки.",
-      "yes": { "type": "action", "text": "Приказать этому юниту атаковать/захватить точку" },
-      "no": { "type": "action", "text": "Нет доступного действия" }
+      "text": "В вашем личном резерве ещё остались карты стрелка?",
+      "memo": [
+        "reinforceRule",
+        "reinforceUnitChoice"
+      ],
+      "yes": {
+        "type": "action",
+        "text": "Пополнить: карта стрелка",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ]
+      },
+      "no": {
+        "type": "question",
+        "text": "В вашем личном резерве ещё остались карты разведчика?",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ],
+        "yes": {
+          "type": "action",
+          "text": "Пополнить: карта разведчика",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ]
+        },
+        "no": {
+          "type": "question",
+          "text": "В вашем личном резерве ещё остались карты снайпера?",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ],
+          "yes": {
+            "type": "action",
+            "text": "Пополнить: карта снайпера",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ]
+          },
+          "no": {
+            "type": "question",
+            "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ],
+            "yes": {
+              "type": "action",
+              "text": "Пополнить: карта пулемётчика",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ]
+            },
+            "no": {
+              "type": "question",
+              "text": "В вашем личном резерве ещё остались карты миномёта?",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ],
+              "yes": {
+                "type": "action",
+                "text": "Пополнить: карта миномёта",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ]
+              },
+              "no": {
+                "type": "question",
+                "text": "Есть юнит, который прямо сейчас может атаковать или захватить ключевую точку?",
+                "note": "Приказ отдаётся ближайшему такому юниту; если подходит несколько — тому, у кого выше приоритет атаки.",
+                "yes": {
+                  "type": "action",
+                  "text": "Приказать этому юниту атаковать/захватить точку"
+                },
+                "no": {
+                  "type": "action",
+                  "text": "Нет доступного действия"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "suppression": {
+      "type": "question",
+      "text": "В вашем личном резерве ещё остались карты снайпера?",
+      "memo": [
+        "reinforceRule",
+        "reinforceUnitChoice"
+      ],
+      "yes": {
+        "type": "action",
+        "text": "Пополнить: карта снайпера",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ]
+      },
+      "no": {
+        "type": "question",
+        "text": "В вашем личном резерве ещё остались карты пулемётчика?",
+        "memo": [
+          "reinforceRule",
+          "reinforceUnitChoice"
+        ],
+        "yes": {
+          "type": "action",
+          "text": "Пополнить: карта пулемётчика",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ]
+        },
+        "no": {
+          "type": "question",
+          "text": "В вашем личном резерве ещё остались карты миномёта?",
+          "memo": [
+            "reinforceRule",
+            "reinforceUnitChoice"
+          ],
+          "yes": {
+            "type": "action",
+            "text": "Пополнить: карта миномёта",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ]
+          },
+          "no": {
+            "type": "question",
+            "text": "В вашем личном резерве ещё остались карты стрелка?",
+            "memo": [
+              "reinforceRule",
+              "reinforceUnitChoice"
+            ],
+            "yes": {
+              "type": "action",
+              "text": "Пополнить: карта стрелка",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ]
+            },
+            "no": {
+              "type": "question",
+              "text": "В вашем личном резерве ещё остались карты разведчика?",
+              "memo": [
+                "reinforceRule",
+                "reinforceUnitChoice"
+              ],
+              "yes": {
+                "type": "action",
+                "text": "Пополнить: карта разведчика",
+                "memo": [
+                  "reinforceRule",
+                  "reinforceUnitChoice"
+                ]
+              },
+              "no": {
+                "type": "question",
+                "text": "Есть юнит, который прямо сейчас может атаковать или захватить ключевую точку?",
+                "note": "Приказ отдаётся ближайшему такому юниту; если подходит несколько — тому, у кого выше приоритет атаки.",
+                "yes": {
+                  "type": "action",
+                  "text": "Приказать этому юниту атаковать/захватить точку"
+                },
+                "no": {
+                  "type": "action",
+                  "text": "Нет доступного действия"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

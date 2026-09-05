@@ -79,45 +79,66 @@ def inspire_chain(order, fallback):
     return node
 
 
-def reinforce_chain(order, fallback):
+def reinforce_chain(order, fallback, bolster_note=None):
     """«Остались карты X в резерве?» по всем 5 типам, в том же порядке
     приоритета. Заменяет прежний общий вопрос «Можно пополнить?» —
     присутствие карты нужного типа в резерве и есть точная проверка
-    «можно ли пополнить с пользой» (OPEN_QUESTIONS.md п. 13)."""
+    «можно ли пополнить с пользой» (OPEN_QUESTIONS.md п. 13).
+
+    bolster_note — примечание про фактическое число карт на конкретной
+    карте (Bolster X), вешается только на первый вопрос цепочки, чтобы
+    не повторяться на каждом шаге."""
     node = fallback
-    for unit in reversed(order):
+    for i, unit in enumerate(reversed(order)):
         g = GENITIVE[unit]
+        is_first = i == len(order) - 1
         node = question(
             f"В вашем личном резерве ещё остались карты {g}?",
             action(f"Пополнить: карта {g}", memo=["reinforceRule", "reinforceUnitChoice"]),
             node,
             memo=["reinforceRule", "reinforceUnitChoice"],
+            note=bolster_note if is_first else None,
         )
     return node
 
 
 NO_ACTION = action("Нет доступного действия")
 
+SERGEANT_BOLSTER_NOTE = (
+    "На карте Командира взвода (Platoon Sergeant) — Bolster 3: можно взять до 3 карт "
+    "суммарно, любых типов юнита и любого отделения (у этой карты нет привязки к "
+    "отделению). Берите карты по одной, начиная с высшего приоритета в этом списке, "
+    "пока не наберёте 3 штуки или не кончится резерв."
+)
+LIEUTENANT_BOLSTER_NOTE = (
+    "На карте Заместителя командира (Platoon Guide) — Bolster 1: только одна карта за "
+    "розыгрыш, любого типа и отделения (у этой карты нет привязки к отделению)."
+)
+
 
 def build_sergeant(order):
-    # §12: 1. Пополнить, 2. Приказать.
-    order_step = question(
-        "Есть юнит, который прямо сейчас может атаковать или захватить ключевую точку?",
-        action("Приказать этому юниту атаковать/захватить точку"),
-        NO_ACTION,
-        note="Приказ отдаётся ближайшему такому юниту; если подходит несколько — тому, у кого выше приоритет атаки.",
+    # §12 bot_script.txt называет второй шаг «Приказать», но это неточный перевод:
+    # по правилам это Command 2 — взять 2 карты из своей колоды в руку и сразу же
+    # разыграть их в этот же ход. Выбора юнита тут нет вообще — какая карта
+    # вытянулась, та и играется по своему обычному дереву решений.
+    command_step = action(
+        "Приказ (Command 2): взять 2 карты из своей колоды в руку и сыграть их немедленно",
+        memo="commandAction",
     )
-    return reinforce_chain(order, order_step)
+    return reinforce_chain(order, command_step, bolster_note=SERGEANT_BOLSTER_NOTE)
 
 
 def build_lieutenant(order):
     # §12: 1. Направить стрелка к точке, 2. Пополнить, 3. Направить боевой юнит к врагу.
+    # У Guide подтверждены только два реальных действия — «двигать юнит» и
+    # «пополнить» — Command/Приказ на этой карте не подтверждён (сверьтесь со
+    # своей картой, если на ней есть третье действие — см. OPEN_QUESTIONS.md п. 15).
     direct_combat = question(
         "Можно направить боевой юнит к ближайшему врагу?",
         action("Направить боевой юнит к ближайшему врагу"),
         NO_ACTION,
     )
-    reinforce = reinforce_chain(order, direct_combat)
+    reinforce = reinforce_chain(order, direct_combat, bolster_note=LIEUTENANT_BOLSTER_NOTE)
     return question(
         "Можно направить стрелка к ключевой точке?",
         action("Направить стрелка к ключевой точке"),
@@ -125,9 +146,16 @@ def build_lieutenant(order):
     )
 
 
+COMMANDER_BOLSTER_NOTE = (
+    "Точное число карт для Bolster на карте Командира отделения (Squad Leader) не "
+    "подтверждено — сверьтесь со своей картой. В отличие от Сержанта и Заместителя "
+    "здесь есть привязка к отделению: берите только карты своего отделения (A/B/C)."
+)
+
+
 def build_commander(order):
     # §12: 1. Воодушевить, 2. Пополнить (если воодушевлять некого).
-    reinforce = reinforce_chain(order, NO_ACTION)
+    reinforce = reinforce_chain(order, NO_ACTION, bolster_note=COMMANDER_BOLSTER_NOTE)
     return inspire_chain(order, reinforce)
 
 

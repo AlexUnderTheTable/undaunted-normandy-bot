@@ -184,6 +184,12 @@ h1 {
   background: var(--accent-bg);
 }
 
+.calc-row-checkbox {
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
 .calc-row-header {
   display: flex;
   align-items: center;

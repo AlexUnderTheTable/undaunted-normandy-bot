@@ -79,27 +79,25 @@ def inspire_chain(order, fallback):
     return node
 
 
-def reinforce_chain(order, fallback, bolster_note=None):
-    """«Остались карты X в резерве?» по всем 5 типам, в том же порядке
-    приоритета. Заменяет прежний общий вопрос «Можно пополнить?» —
-    присутствие карты нужного типа в резерве и есть точная проверка
-    «можно ли пополнить с пользой» (OPEN_QUESTIONS.md п. 13).
-
-    bolster_note — примечание про фактическое число карт на конкретной
-    карте (Bolster X), вешается только на первый вопрос цепочки, чтобы
-    не повторяться на каждом шаге."""
-    node = fallback
-    for i, unit in enumerate(reversed(order)):
-        g = GENITIVE[unit]
-        is_first = i == len(order) - 1
-        node = question(
-            f"В вашем личном резерве ещё остались карты {g}?",
-            action(f"Пополнить: карта {g}", memo=["reinforceRule", "reinforceUnitChoice"]),
-            node,
+def reinforce_step(fallback, bolster_note=None):
+    """Единый вопрос пополнения (OPEN_QUESTIONS.md п. 17): раньше здесь была
+    цепочка «Остались карты X в резерве?» по всем 5 типам подряд — за
+    столом это было медленнее, чем прикинуть сразу. Теперь это один вопрос;
+    интерфейс сам показывает `ReinforceCalculator` — чекбоксы по всем 5
+    типам сразу, который считает приоритет текущей цели ИИ через
+    `resolvePriorityList("reinforceUnitChoice", aiGoal)`. Поэтому, в отличие
+    от `inspire_chain`, порядок приоритета сюда не передаётся: сам текст
+    вопроса от aiGoal не зависит."""
+    return question(
+        "В резерве есть карты юнита, которым стоит пополниться (см. калькулятор ниже)?",
+        action(
+            "Пополнить: юнитом, который показал калькулятор выше",
             memo=["reinforceRule", "reinforceUnitChoice"],
-            note=bolster_note if is_first else None,
-        )
-    return node
+        ),
+        fallback,
+        memo=["reinforceRule", "reinforceUnitChoice"],
+        note=bolster_note,
+    )
 
 
 NO_ACTION = action("Нет доступного действия")
@@ -125,7 +123,7 @@ def build_sergeant(order):
         "Приказ (Command 2): взять 2 карты из своей колоды в руку и сыграть их немедленно",
         memo="commandAction",
     )
-    return reinforce_chain(order, command_step, bolster_note=SERGEANT_BOLSTER_NOTE)
+    return reinforce_step(command_step, bolster_note=SERGEANT_BOLSTER_NOTE)
 
 
 def build_lieutenant(order):
@@ -138,7 +136,7 @@ def build_lieutenant(order):
         action("Направить боевой юнит к ближайшему врагу"),
         NO_ACTION,
     )
-    reinforce = reinforce_chain(order, direct_combat, bolster_note=LIEUTENANT_BOLSTER_NOTE)
+    reinforce = reinforce_step(direct_combat, bolster_note=LIEUTENANT_BOLSTER_NOTE)
     return question(
         "Можно направить стрелка к ключевой точке?",
         action("Направить стрелка к ключевой точке"),
@@ -155,7 +153,7 @@ COMMANDER_BOLSTER_NOTE = (
 
 def build_commander(order):
     # §12: 1. Воодушевить, 2. Пополнить (если воодушевлять некого).
-    reinforce = reinforce_chain(order, NO_ACTION, bolster_note=COMMANDER_BOLSTER_NOTE)
+    reinforce = reinforce_step(NO_ACTION, bolster_note=COMMANDER_BOLSTER_NOTE)
     return inspire_chain(order, reinforce)
 
 

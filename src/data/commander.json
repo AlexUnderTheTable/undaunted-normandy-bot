@@ -49,7 +49,7 @@
               },
               "no": {
                 "type": "question",
-                "text": "В вашем личном резерве ещё остались карты стрелка?",
+                "text": "В резерве есть карты юнита, которым стоит пополниться (см. калькулятор ниже)?",
                 "memo": [
                   "reinforceRule",
                   "reinforceUnitChoice"
@@ -57,79 +57,15 @@
                 "note": "Точное число карт для Bolster на карте Командира отделения (Squad Leader) не подтверждено — сверьтесь со своей картой. В отличие от Сержанта и Заместителя здесь есть привязка к отделению: берите только карты своего отделения (A/B/C).",
                 "yes": {
                   "type": "action",
-                  "text": "Пополнить: карта стрелка",
+                  "text": "Пополнить: юнитом, который показал калькулятор выше",
                   "memo": [
                     "reinforceRule",
                     "reinforceUnitChoice"
                   ]
                 },
                 "no": {
-                  "type": "question",
-                  "text": "В вашем личном резерве ещё остались карты разведчика?",
-                  "memo": [
-                    "reinforceRule",
-                    "reinforceUnitChoice"
-                  ],
-                  "yes": {
-                    "type": "action",
-                    "text": "Пополнить: карта разведчика",
-                    "memo": [
-                      "reinforceRule",
-                      "reinforceUnitChoice"
-                    ]
-                  },
-                  "no": {
-                    "type": "question",
-                    "text": "В вашем личном резерве ещё остались карты снайпера?",
-                    "memo": [
-                      "reinforceRule",
-                      "reinforceUnitChoice"
-                    ],
-                    "yes": {
-                      "type": "action",
-                      "text": "Пополнить: карта снайпера",
-                      "memo": [
-                        "reinforceRule",
-                        "reinforceUnitChoice"
-                      ]
-                    },
-                    "no": {
-                      "type": "question",
-                      "text": "В вашем личном резерве ещё остались карты пулемётчика?",
-                      "memo": [
-                        "reinforceRule",
-                        "reinforceUnitChoice"
-                      ],
-                      "yes": {
-                        "type": "action",
-                        "text": "Пополнить: карта пулемётчика",
-                        "memo": [
-                          "reinforceRule",
-                          "reinforceUnitChoice"
-                        ]
-                      },
-                      "no": {
-                        "type": "question",
-                        "text": "В вашем личном резерве ещё остались карты миномёта?",
-                        "memo": [
-                          "reinforceRule",
-                          "reinforceUnitChoice"
-                        ],
-                        "yes": {
-                          "type": "action",
-                          "text": "Пополнить: карта миномёта",
-                          "memo": [
-                            "reinforceRule",
-                            "reinforceUnitChoice"
-                          ]
-                        },
-                        "no": {
-                          "type": "action",
-                          "text": "Нет доступного действия"
-                        }
-                      }
-                    }
-                  }
+                  "type": "action",
+                  "text": "Нет доступного действия"
                 }
               }
             }
@@ -184,7 +120,7 @@
               },
               "no": {
                 "type": "question",
-                "text": "В вашем личном резерве ещё остались карты снайпера?",
+                "text": "В резерве есть карты юнита, которым стоит пополниться (см. калькулятор ниже)?",
                 "memo": [
                   "reinforceRule",
                   "reinforceUnitChoice"
@@ -192,79 +128,15 @@
                 "note": "Точное число карт для Bolster на карте Командира отделения (Squad Leader) не подтверждено — сверьтесь со своей картой. В отличие от Сержанта и Заместителя здесь есть привязка к отделению: берите только карты своего отделения (A/B/C).",
                 "yes": {
                   "type": "action",
-                  "text": "Пополнить: карта снайпера",
+                  "text": "Пополнить: юнитом, который показал калькулятор выше",
                   "memo": [
                     "reinforceRule",
                     "reinforceUnitChoice"
                   ]
                 },
                 "no": {
-                  "type": "question",
-                  "text": "В вашем личном резерве ещё остались карты пулемётчика?",
-                  "memo": [
-                    "reinforceRule",
-                    "reinforceUnitChoice"
-                  ],
-                  "yes": {
-                    "type": "action",
-                    "text": "Пополнить: карта пулемётчика",
-                    "memo": [
-                      "reinforceRule",
-                      "reinforceUnitChoice"
-                    ]
-                  },
-                  "no": {
-                    "type": "question",
-                    "text": "В вашем личном резерве ещё остались карты миномёта?",
-                    "memo": [
-                      "reinforceRule",
-                      "reinforceUnitChoice"
-                    ],
-                    "yes": {
-                      "type": "action",
-                      "text": "Пополнить: карта миномёта",
-                      "memo": [
-                        "reinforceRule",
-                        "reinforceUnitChoice"
-                      ]
-                    },
-                    "no": {
-                      "type": "question",
-                      "text": "В вашем личном резерве ещё остались карты стрелка?",
-                      "memo": [
-                        "reinforceRule",
-                        "reinforceUnitChoice"
-                      ],
-                      "yes": {
-                        "type": "action",
-                        "text": "Пополнить: карта стрелка",
-                        "memo": [
-                          "reinforceRule",
-                          "reinforceUnitChoice"
-                        ]
-                      },
-                      "no": {
-                        "type": "question",
-                        "text": "В вашем личном резерве ещё остались карты разведчика?",
-                        "memo": [
-                          "reinforceRule",
-                          "reinforceUnitChoice"
-                        ],
-                        "yes": {
-                          "type": "action",
-                          "text": "Пополнить: карта разведчика",
-                          "memo": [
-                            "reinforceRule",
-                            "reinforceUnitChoice"
-                          ]
-                        },
-                        "no": {
-                          "type": "action",
-                          "text": "Нет доступного действия"
-                        }
-                      }
-                    }
-                  }
+                  "type": "action",
+                  "text": "Нет доступного действия"
                 }
               }
             }

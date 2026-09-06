@@ -1,27 +1,22 @@
 /**
  * Ценность ключевой точки (§6 bot_script.txt): ПО − расстояние + штраф за
- * контроль игроком. Разбор случая "controlledUnreachable" — `OPEN_QUESTIONS.md` п. 5.
+ * контроль игроком. Случай "под контролем, но дойти некому" (`OPEN_QUESTIONS.md`
+ * п. 5) даёт тот же штраф 0, что и "не под контролем", поэтому объединён с
+ * "none" в один пункт выбора — см. `OPEN_QUESTIONS.md` п. 16.
  */
 
-export type Control =
-  | "none"
-  | "scouted"
-  | "controlledUnreachable"
-  | "reachable"
-  | "occupied";
+export type Control = "none" | "scouted" | "reachable" | "occupied";
 
 export const controlPenalty: Record<Control, number> = {
   none: 0,
   scouted: -0.5,
-  controlledUnreachable: 0,
   reachable: -1,
   occupied: -2,
 };
 
 export const controlLabel: Record<Control, string> = {
-  none: "Не под контролем и не разведана игроком",
+  none: "Не под контролем игрока (или под контролем, но дойти туда в этот ход некому)",
   scouted: "Только разведана игроком (под контролем не считается)",
-  controlledUnreachable: "Под контролем игрока, но дойти туда в этот ход некому",
   reachable:
     "Под контролем игрока, юнита на ней нет, но игрок может доставить туда юнита в этот ход",
   occupied: "Под контролем игрока, юнит игрока стоит на ней прямо сейчас",

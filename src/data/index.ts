@@ -62,6 +62,18 @@ export function getUnitTree(id: string, aiGoal: AiGoal): TreeNode {
   return AGGRESSION_UNITS.has(id) ? withEndgameGate(tree) : tree;
 }
 
+/**
+ * Узел «Приказ (Command 2)» сержанта — это ветка «нет» корневого вопроса
+ * пополнения (см. `sergeant.json`). Переиспользуем ссылку на этот же объект
+ * вместо копии текста, чтобы счётчик из `OPEN_QUESTIONS.md` п. 19 не мог
+ * разойтись с обычным путём к Приказу через исчерпанный резерв.
+ */
+export function getSergeantCommandNode(aiGoal: AiGoal): TreeNode {
+  const tree = getUnitTree("sergeant", aiGoal);
+  if (tree.type !== "question") throw new Error("sergeant tree is expected to start with a question");
+  return tree.no;
+}
+
 export function resolveMemo(memoKey: string, aiGoal: AiGoal): string {
   const key = memoKey === "targetSelection" ? `targetSelection_${aiGoal}` : memoKey;
   return common.memos[key] ?? "";
@@ -69,7 +81,9 @@ export function resolveMemo(memoKey: string, aiGoal: AiGoal): string {
 
 export function resolvePriorityList(memoKey: string, aiGoal: AiGoal): string[] {
   const listKey =
-    memoKey === "targetSelection" || memoKey === "mortarSquareSelection"
+    memoKey === "targetSelection" ||
+    memoKey === "mortarSquareSelection" ||
+    memoKey === "reinforceUnitChoice"
       ? aiGoal
       : memoKey === "targetSelection_sniper"
         ? "sniper"

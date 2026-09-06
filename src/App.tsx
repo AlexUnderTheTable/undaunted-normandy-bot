@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
-import { getUnitTree, resolveMemo, resolvePriorityList, unitsList } from "./data";
+import { getSergeantCommandNode, getUnitTree, resolveMemo, resolvePriorityList, unitsList } from "./data";
 import type { AiGoal, TreeNode } from "./data/types";
+import { advanceCommandCounter, COMMAND_INTERVAL, type CommandCounterResult } from "./logic/commandCounter";
 import KeyPointCalculator from "./components/KeyPointCalculator";
 import TargetCalculator from "./components/TargetCalculator";
 import MortarCalculator from "./components/MortarCalculator";
+import ReinforceCalculator from "./components/ReinforceCalculator";
 import "./App.css";
 
 const AI_GOAL_KEY = "undaunted-ai-goal";
 const THEME_KEY = "undaunted-theme";
+const SERGEANT_COUNTER_KEY = "undaunted-sergeant-command-counter";
 
 type Theme = "light" | "dark";
 
 function loadAiGoal(): AiGoal | null {
   const stored = localStorage.getItem(AI_GOAL_KEY);
   return stored === "keyPoints" || stored === "suppression" ? stored : null;
+}
+
+function loadSergeantCounter(): number {
+  const stored = parseInt(localStorage.getItem(SERGEANT_COUNTER_KEY) ?? "0", 10);
+  return Number.isFinite(stored) && stored >= 0 && stored < COMMAND_INTERVAL ? stored : 0;
 }
 
 function loadTheme(): Theme {
@@ -77,6 +85,7 @@ function UnitPicker({
     <div className="screen">
       <h1>Какая карта выпала?</h1>
       <MemoBox memoKey="generalRule" aiGoal={aiGoal} />
+      <MemoBox memoKey="initiativeRule" aiGoal={aiGoal} />
       <div className="options">
         {unitsList.map((u) => (
           <button key={u.id} onClick={() => onSelect(u.id)}>
@@ -114,13 +123,17 @@ function TreeWalker({
   unitName,
   aiGoal,
   onExit,
+  rootOverride,
+  commandCounter,
 }: {
   unitId: string;
   unitName: string;
   aiGoal: AiGoal;
   onExit: () => void;
+  rootOverride?: TreeNode;
+  commandCounter?: CommandCounterResult;
 }) {
-  const root = getUnitTree(unitId, aiGoal);
+  const root = rootOverride ?? getUnitTree(unitId, aiGoal);
   const [stack, setStack] = useState<TreeNode[]>([root]);
   const current = stack[stack.length - 1];
   const memos = memoKeys(current);
@@ -141,6 +154,17 @@ function TreeWalker({
     <div className="screen">
       <h1>{unitName}</h1>
 
+      {commandCounter && (
+        <>
+          <div className="note">
+            {commandCounter.triggered
+              ? `Это ${COMMAND_INTERVAL}-й розыгрыш карты подряд — Приказ (Command 2) выполняется напрямую.`
+              : `Розыгрыш подряд без Приказа: ${commandCounter.playCount} из ${COMMAND_INTERVAL}.`}
+          </div>
+          <MemoBox memoKey="commandCounterRule" aiGoal={aiGoal} />
+        </>
+      )}
+
       {current.type !== "action" && (
         <p className="question">{current.text}</p>
       )}
@@ -159,6 +183,9 @@ function TreeWalker({
       )}
       {memos.includes("mortarSquareSelection") && (
         <MortarCalculator priorityList={resolvePriorityList("mortarSquareSelection", aiGoal)} />
+      )}
+      {memos.includes("reinforceUnitChoice") && (
+        <ReinforceCalculator priorityList={resolvePriorityList("reinforceUnitChoice", aiGoal)} />
       )}
 
       {current.type === "question" && (
@@ -206,6 +233,7 @@ export default function App() {
   const [pickingGoal, setPickingGoal] = useState(aiGoal === null);
   const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
   const [theme, setTheme] = useState<Theme>(loadTheme());
+  const [sergeantCounter, setSergeantCounter] = useState<CommandCounterResult | null>(null);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -223,24 +251,39 @@ export default function App() {
     setTheme(next);
   }
 
+  function handleSelectUnit(unitId: string) {
+    if (unitId === "sergeant") {
+      const result = advanceCommandCounter(loadSergeantCounter());
+      localStorage.setItem(SERGEANT_COUNTER_KEY, String(result.nextStored));
+      setSergeantCounter(result);
+    } else {
+      setSergeantCounter(null);
+    }
+    setSelectedUnitId(unitId);
+  }
+
   let screen;
   if (pickingGoal || aiGoal === null) {
     screen = <AiGoalPicker current={aiGoal} onPick={handlePickGoal} />;
   } else if (selectedUnitId) {
     const unit = unitsList.find((u) => u.id === selectedUnitId)!;
+    const rootOverride =
+      unit.id === "sergeant" && sergeantCounter?.triggered ? getSergeantCommandNode(aiGoal) : undefined;
     screen = (
       <TreeWalker
         unitId={unit.id}
         unitName={unit.name}
         aiGoal={aiGoal}
         onExit={() => setSelectedUnitId(null)}
+        rootOverride={rootOverride}
+        commandCounter={unit.id === "sergeant" ? (sergeantCounter ?? undefined) : undefined}
       />
     );
   } else {
     screen = (
       <UnitPicker
         aiGoal={aiGoal}
-        onSelect={setSelectedUnitId}
+        onSelect={handleSelectUnit}
         onChangeGoal={() => setPickingGoal(true)}
       />
     );
